@@ -8,7 +8,8 @@ new Vue ({
     gameStarted: false,
     damage: 0,
     heal: 0,
-    turns: []
+    turns: [],
+    preventMultiplePrompts: false
 
   },
 
@@ -18,6 +19,7 @@ new Vue ({
       this.playerHP = 100;
       this.monsterHP = 100;
       this.gameStarted = true;
+      this.preventMultiplePrompts = false;
     },
 
     calculateAttack: function () {
@@ -110,8 +112,9 @@ new Vue ({
     },
 
     winCheck: function () {
-      if (this.monsterHP <= 0 || this.playerHP <= 0) {
-        if (confirm("Game Over! New Game ?") == true) {
+      if (this.monsterHP <= 0 || this.playerHP <= 0 && this.preventMultiplePrompts === false) {
+        this.preventMultiplePrompts = true;
+        if (confirm("Game Over!\n Your HP: "+this.playerHP+"\nMonsterHP: "+this.monsterHP) == true) {
           this.gameStarted = false;
           this.startGame();
         } else {
